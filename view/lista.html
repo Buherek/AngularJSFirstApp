@@ -1,0 +1,92 @@
+<!doctype html>
+<html id="ng-app" ng-app="archiwizer">
+  <head>
+    <title>Archiwum elektronicznych faktur</title>
+	<link rel="stylesheet" href="../stylesheet/styleLista.css">
+	<link rel="stylesheet" href="../stylesheet/jquery-ui-1.10.3.custom.min.css"/>
+	<script type="text/javascript" src="../src/jquery-1.10.2.min.js" ></script>
+	<script type="text/javascript" src="../src/jquery-ui-1.10.3.custom.min.js"></script>
+	<script type="text/javascript" src="../src/angular-1.2.0.js" ></script>
+	<script type="text/javascript" src="../src/archiwizer.js" ></script>
+	<script type="text/javascript" src="../src/datepicker.js" ></script>
+	<script type="text/javascript" src="../src/ctrlArchiwizer.js" ></script>
+	<script type="text/javascript" src="../src/srvArchiwizer.js" ></script>
+  </head>
+  <body >
+  <div ng-controller="ArchiwizerController">
+  <p>Lista dokumentów<p>
+	<form>
+	<label>Filtrowanie</label>
+	<span>
+	<label>Data od</label>
+	<input type="text" ng-model="dateFromFiltr" datepicker="true" name="date"/>
+	<label>Data do</label>
+	<input type="text" ng-model="dateToFiltr" datepicker="true" name="date"/>
+	</span>
+	<span>
+	<label>Numer faktury</label>
+	<input ng-model="numInvoiceFiltr" />
+	</span>
+	<span>
+	<label>Nip</label>
+	<input ng-model="taxIdFiltr"/>
+	</span>
+	<span>
+	<button ng-click="reset()">Reset</button>
+	<button ng-click="filtruj()">Filtruj</button>
+	<span>
+	</form>
+	<span>
+	<span>
+		Ilość faktur:
+	</span>
+	<span>
+		{{numberInvoice()}}
+	<span>
+	<span class="poprzednia">
+	<a ng-disabled="disableBefore()" ng-click="decrementCurrentPage()"></a>
+	</span>
+	<input ng-model="currentPageTmp" ng-blur="checkCurrentPage()">
+	<span>
+	/
+	</span>
+	<span>
+		{{numberOfPages()}}
+	</span>
+	<span class="nastepna">
+    <a ng-disabled="disableNext()" ng-click="incrementCurrentPage()"></a>
+	</span>
+	</span>
+	<div>
+	<table>
+	<th>
+	<a ng-click="sortuj('data')">Data</a>
+	<span ng-if="isPredicateAndReverse('date',false)">^</span>
+	<span ng-if="isPredicateAndReverse('date',true)">ˇ</span>
+	</th>
+	<th>
+	<a ng-click="sortuj('numer')">Numer faktury</a>
+	<span ng-if="isPredicateAndReverse('numer',false)">^</span>
+	<span ng-if="isPredicateAndReverse('numer',true)">ˇ</span>
+	</th>
+	<th>
+	<a ng-click="sortuj('nip')">Nip</a>
+	<span ng-if="isPredicateAndReverse('nip',false)">^</span>
+	<span ng-if="isPredicateAndReverse('nip',true)">ˇ</span>
+	</th>
+	<th>
+	<a ng-click="sortuj('kh')">Kontrahent</a>
+	<span ng-if="isPredicateAndReverse('kh',false)">^</span>
+	<span ng-if="isPredicateAndReverse('kh',true)">ˇ</span>
+	</th>
+	<tr ng-repeat="invoice in filteredList | startFrom:startFrom() | limitTo:pageSize">
+	<td>{{invoice.data}}</td>
+	<td>{{invoice.numer}}</td>
+	<td>{{invoice.nip}}</td>
+	<td>{{invoice.kh}}</td>
+	</tr>
+	</table>
+  </div>
+	
+  </body>
+</html>
